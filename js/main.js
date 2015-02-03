@@ -70,7 +70,7 @@
       sounds: [dice_sound_params, piece_sound_params],
       path: 'sounds/',
       preload: true,
-      volume: 1.0
+      volume: 0.5
     });
   });
 
