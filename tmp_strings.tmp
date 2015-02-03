@@ -1,0 +1,24 @@
+<script type="text/javascript">
+
+        var _sessionId = "<?php echo $s->getSessionId(); ?>";
+        var _userId = <?php echo $s->getUserId(); ?>;
+        var _username = "<?php echo $s->getUsername(); ?>";
+        var _isGuest = <?php if ($s->isGuest()) echo "true"; else echo "false"; ?>;
+
+        var _gameVariationId = <?php echo $s->getGameVariationId(); ?>;
+
+        <?php if ($isFreshUser): ?>
+        var _isFreshUser = true;
+        <?php else: ?>
+        var _isFreshUser = false;
+        <?php endif; ?>
+
+        var _isVk = <?php echo $GLOBALS['isVk']?'true':'false'; ?> ;
+
+    </script>
+
+    <?php
+echo "<script type='text/javascript' src='/js/build/shared-main.js?v=$v'></script> \n\r";
+echo "<script type='text/javascript' src='/js/build/public-main.min.js?v=$v'></script> \n\r";
+echo "<script type='text/javascript' src='/js/lang/lang.".$s->getI18n()->get("locale", "id").".js?v=$v'></script> \n\r";
+?>

@@ -1,0 +1,44 @@
+{
+  "name": "v6-game-server",
+  "version": "0.5.2",
+  "description": "V6 game server",
+  "author": {
+    "name": "King of Animals Lion"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "es6-promise": "*",
+    "v6-ws": "*",
+    "mysql": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/levserk/v6-game-server"
+  },
+  "gitHead": "74893ee963da14864c6f006eff80b21a3429cb18",
+  "bugs": {
+    "url": "https://github.com/levserk/v6-game-server/issues"
+  },
+  "homepage": "https://github.com/levserk/v6-game-server",
+  "_id": "v6-game-server@0.5.2",
+  "scripts": {},
+  "_shasum": "7edd0556df7fe63e690f378d18415d2803a85940",
+  "_from": "v6-game-server@",
+  "_npmVersion": "2.0.0",
+  "_npmUser": {
+    "name": "levserk",
+    "email": "levserk@mail.ru"
+  },
+  "maintainers": [
+    {
+      "name": "levserk",
+      "email": "levserk@mail.ru"
+    }
+  ],
+  "dist": {
+    "shasum": "7edd0556df7fe63e690f378d18415d2803a85940",
+    "tarball": "http://registry.npmjs.org/v6-game-server/-/v6-game-server-0.5.2.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/v6-game-server/-/v6-game-server-0.5.2.tgz"
+}
