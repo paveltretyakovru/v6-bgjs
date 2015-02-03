@@ -166,8 +166,8 @@ Game.prototype.initPieces = function(pieces){
                             this.pieces[i].field  = 13;
                             
                             // распологаем белые слева
-                            this.enemy.side = 'right';
-                            this.side       = 'left';
+                            this.enemy.side = 'left';
+                            this.side       = 'right';
                             
                             this.startPiecesPositions(
                                 this.pieces[i].obj ,
@@ -178,8 +178,8 @@ Game.prototype.initPieces = function(pieces){
                             this.pieces[i].field  = 1;
                             
                             // располагаем черные справа
-                            this.enemy.side = 'right';
-                            this.side       = 'left';
+                            this.enemy.side = 'left';
+                            this.side       = 'right';
                             this.startPiecesPositions(
                                 this.pieces[i].obj ,
                                 1 ,
@@ -232,8 +232,8 @@ Game.prototype.initPieces = function(pieces){
                     if(i === num[n]){
                         self.pieces[i].field  = field;
                         // распологаем белые слева
-                        self.enemy.side = 'right';
-                        self.side       = 'left';
+                        self.enemy.side = 'left';
+                        self.side       = 'right';
                                 
                         self.startPiecesPositions(self.pieces[i].obj,field,self.pieces[i]);
                     }   
@@ -330,8 +330,8 @@ Game.prototype.initPieces = function(pieces){
                 if(i === num[n]){
                     self.pieces[i].field  = field;
                     // распологаем белые слева
-                    self.enemy.side = 'right';
-                    self.side       = 'left';
+                    self.enemy.side = 'left';
+                    self.side       = 'right';
 
                     self.startPiecesPositions(self.pieces[i].obj,field,self.pieces[i]);
                 }
@@ -427,8 +427,8 @@ Game.prototype.initPieces = function(pieces){
                     if(i === num[n]){
                         self.pieces[i].field  = field;
                         // распологаем белые слева
-                        self.enemy.side = 'right';
-                        self.side       = 'left';
+                        self.enemy.side = 'left';
+                        self.side       = 'right';
                                 
                         self.startPiecesPositions(self.pieces[i].obj,field,self.pieces[i]);
                     }   
@@ -518,8 +518,8 @@ Game.prototype.initPieces = function(pieces){
                     if(i === num[n]){
                         self.pieces[i].field  = field;
                         // распологаем белые слева
-                        self.enemy.side = 'right';
-                        self.side       = 'left';
+                        self.enemy.side = 'left';
+                        self.side       = 'right';
                                 
                         self.startPiecesPositions(self.pieces[i].obj,field,self.pieces[i]);
                     }   
@@ -626,8 +626,8 @@ Game.prototype.initPieces = function(pieces){
                     if(i === num[n]){
                         self.pieces[i].field  = field;
                         // распологаем белые слева
-                        self.enemy.side = 'right';
-                        self.side       = 'left';
+                        self.enemy.side = 'left';
+                        self.side       = 'right';
                                 
                         self.startPiecesPositions(self.pieces[i].obj,field,self.pieces[i]);
                     }   
@@ -2586,12 +2586,13 @@ Game.prototype.takeGameData = function(data){
             ){
                 console.log('Получены данные начала игры с сервера: ' , data.inviteData);
                 // Сохраняем значение костей для хода
-                this.step.bones = data.inviteData.bones;
-                //this.step.bones = [2 , 2];
+                //this.step.bones = data.inviteData.bones;
+                this.step.bones = [5 , 5];
                 //this.step.bones = [2 , 3];
                 //this.step.bones = [1 , 5]; // block test
                 //this.step.bones = [1 , 2];  // restep test
                 //this.step.bones = [3 , 4];
+
                 
                 
                 // Анимируем жеребьевку
@@ -2635,7 +2636,12 @@ Game.prototype.takeGameData = function(data){
                         // время тряски
                         var shaketime   = self.timelot / 6;
                         // взбалтываем первую кость
-                        self.bones.shake(0 , shaketime , self.step.bones[0]);
+
+                        console.log('Lot bones: ' , self.step.bones);
+
+                        self.bones.animateStepBones(self.step.bones , self.side);
+
+                        //self.bones.shake(0 , shaketime , self.step.bones[0]);                    
                         
                         setTimeout(function(){
                             // взбалтываем вторую кость

@@ -933,7 +933,7 @@ $visitorStats = $s->getVisitorStats();
 
 	<div class="die" id="die3">
 		<div class="face" data-id="1">
-			<div class="pip center middle"></div>
+			<div class="pip centerSmall middle"></div>
 		</div>
 		<div class="face" data-id="2">
 			<div class="pip top right"></div>
@@ -941,7 +941,7 @@ $visitorStats = $s->getVisitorStats();
 		</div>
 		<div class="face" data-id="3">
 			<div class="pip top left"></div>
-			<div class="pip center middle"></div>
+			<div class="pip centerSmall middle"></div>
 			<div class="pip bottom right"></div>
 		</div>
 		<div class="face" data-id="4">
@@ -953,7 +953,7 @@ $visitorStats = $s->getVisitorStats();
 		<div class="face" data-id="5">
 			<div class="pip top left"></div>
 			<div class="pip bottom left"></div>
-			<div class="pip center middle"></div>
+			<div class="pip centerSmall middle"></div>
 			<div class="pip top right"></div>
 			<div class="pip bottom right"></div>
 		</div>
@@ -977,7 +977,7 @@ $visitorStats = $s->getVisitorStats();
 		</div>
 		<div class="face" data-id="3">
 			<div class="pip top left"></div>
-			<div class="pip center middle"></div>
+			<div class="pip centerSmall middle"></div>
 			<div class="pip bottom right"></div>
 		</div>
 		<div class="face" data-id="4">
@@ -989,7 +989,7 @@ $visitorStats = $s->getVisitorStats();
 		<div class="face" data-id="5">
 			<div class="pip top left"></div>
 			<div class="pip bottom left"></div>
-			<div class="pip center middle"></div>
+			<div class="pip centerSmall middle"></div>
 			<div class="pip top right"></div>
 			<div class="pip bottom right"></div>
 		</div>
