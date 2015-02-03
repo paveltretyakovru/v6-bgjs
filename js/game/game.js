@@ -18,7 +18,7 @@ Game.prototype.socket   = {};
 // ### конец управляющих объектов системы
 
 Game.prototype.meselement   = '#gamestatus';
-Game.prototype.type         = 'blocktest';   // тип игры | long || prehouse // blocktest // restep // outpieces // housebroke
+Game.prototype.type         = 'long';   // тип игры | long || prehouse // blocktest // restep // outpieces // housebroke
 Game.prototype.onepos       = true;     // фишки распалагаются всега в одной позиции
 Game.prototype.pieces       = [ /* */];
 Game.prototype.side         = '';       // left || right
@@ -2586,8 +2586,8 @@ Game.prototype.takeGameData = function(data){
             ){
                 console.log('Получены данные начала игры с сервера: ' , data.inviteData);
                 // Сохраняем значение костей для хода
-                //this.step.bones = data.inviteData.bones;
-                this.step.bones = [5 , 5];
+                this.step.bones = data.inviteData.bones;
+                //this.step.bones = [5 , 5];
                 //this.step.bones = [2 , 3];
                 //this.step.bones = [1 , 5]; // block test
                 //this.step.bones = [1 , 2];  // restep test
@@ -2628,7 +2628,7 @@ Game.prototype.takeGameData = function(data){
                 */
                 setTimeout(function() {
                     self.initPieces(data.inviteData.pieces);
-                    self.moveBonesToNeed();
+                    //self.moveBonesToNeed();
                     
                     // После передвижения фишек, снова взбалтываем их
                     // для определения очков хода
@@ -2637,7 +2637,7 @@ Game.prototype.takeGameData = function(data){
                         var shaketime   = self.timelot / 6;
                         // взбалтываем первую кость
 
-                        console.log('Lot bones: ' , self.step.bones);
+                        console.log('Lot bones: ' , self.step.bones , self.side);
 
                         self.bones.animateStepBones(self.step.bones , self.side);
 
@@ -2645,7 +2645,7 @@ Game.prototype.takeGameData = function(data){
                         
                         setTimeout(function(){
                             // взбалтываем вторую кость
-                            self.bones.shake(1 , shaketime , self.step.bones[1]);
+                            //self.bones.shake(1 , shaketime , self.step.bones[1]);
                             
                             // НАКОНЕЦ НАЧИНАЕМ ИГРУ!!!
                             self.letsRock();
