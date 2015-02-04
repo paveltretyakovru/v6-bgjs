@@ -1,7 +1,7 @@
 module.exports = {
-    game: 'test',
+    game: 'backgammon',
     port: 8080,
-    pingTimeout:100000,
+    pingTimeout:1000000,
     pingInterval:10000,
     logLevel:3,
     turnTime: 600,

@@ -143,7 +143,8 @@ Rules.prototype.headRules = function(oldfield , pieceid){
     
     // исключение первого хода
     if(steps === 4){
-        if(this.game.countsteps === 0 || this.game.countsteps === 1){
+        //if(this.game.countsteps === 0 || this.game.countsteps === 1){
+        if(this.game.countsteps === 0){
             if(bone1 === 6 || bone1 === 4 || bone1 === 3){
                 two = true;
             }
@@ -304,7 +305,7 @@ Rules.prototype.calcMove = function(oldfield , newfield , pieceid , configs){
     /*
         # Игрок передвигает фишку назад
     */
-    if(newfield < oldfield){
+    if(newfield < oldfield && !clickboard){
         var max = false;
         var too = [];
         

@@ -731,6 +731,11 @@ Game.prototype.startPiecesPositions = function(pieceobj , fieldnum , piece){
     // перемещаем фишку
      pieceobj.x(position.x);
      pieceobj.y(position.y);
+
+     pieceobj.oldpos = {
+        x : position.x ,
+        y : position.y
+     }
             
     // добавляем фишку на поле
     this.board.addPiece(pieceobj.id() , fieldnum);
@@ -1913,9 +1918,11 @@ Game.prototype.setDraggable = function(piece , oldfield){
     // делаем фишку перетаскиваемой
     piece.draggable(true);
     
+    /*
     piece.on('dragstart' , function(){
             pieceobj.oldpos = {x : this.x() , y : this.y()};
     });
+    */
     
     // событие после отпускания фишки, после её перетягивания
     piece.on('dragend' , function(){
@@ -2039,6 +2046,11 @@ Game.prototype.movePiece = function(x , y , oldfield , piece){
         pos         = this.board.calcLastFieldPos(movefield);
         // перемещаем идентификатор фишки
         this.moveIdPiece(movefield , piece.id);
+    }
+
+    piece.oldpos = {
+        x : pos.x ,
+        y : pos.y
     }
         
     // перемещаем фишку
@@ -2505,7 +2517,8 @@ Game.prototype.calcPoints = function(){
     // исключение первого хода
     if(steps === 4){
         if(this.countsteps === 0){
-            if(bone1 === 6 || bone1 === 4 || bone1 === 3){
+            //if(bone1 === 6 || bone1 === 4 || bone1 === 3){
+            if(bone1 === 6){
                 steps = 2;
             }
         }
@@ -2589,8 +2602,8 @@ Game.prototype.takeGameData = function(data){
             ){
                 console.log('Получены данные начала игры с сервера: ' , data.inviteData);
                 // Сохраняем значение костей для хода
-                //this.step.bones = data.inviteData.bones;
-                this.step.bones = [6 , 6];
+                this.step.bones = data.inviteData.bones;
+                //this.step.bones = [6 , 6];
                 //this.step.bones = [2 , 3];
                 //this.step.bones = [1 , 5]; // block test
                 //this.step.bones = [1 , 2];  // restep test
@@ -2725,7 +2738,7 @@ Game.prototype.countDown = function(callback , element ,second,endMinute,endHour
     endYear =  endYear || now.getFullYear();            
     endMonth = endMonth ? endMonth - 1 : now.getMonth();   //номер месяца начинается с 0
     endDay = endDay || now.getDate();
-    endHour = endHour || now.getHours() ;
+    endHour = endHour || now.getHours();
     endMinute = endMinute || now.getMinutes();
     //добавляем секунду к конечной дате (таймер показывает время уже спустя 1с.) 
     var endDate = new Date(endYear,endMonth,endDay,endHour,endMinute,second+1); 
