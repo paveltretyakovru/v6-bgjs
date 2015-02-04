@@ -8,9 +8,9 @@ Bones.prototype.board       = '#container';
 Bones.prototype.vals        = [0 , 0];
 Bones.prototype.size        = 40;
 Bones.prototype.selector    = {};
-Bones.prototype.moveanimtime= 1300; // время перемещения фишек
+Bones.prototype.moveanimtime= 1500; // время перемещения фишек
 Bones.prototype.shaketime   = 500;// время встярски костей
-Bones.prototype.movestyle   = 'easeOutElastic';
+Bones.prototype.movestyle   = 'easeOutBounce';
 
 /*
     # Функция возвращает параметры доски
@@ -134,7 +134,7 @@ Bones.prototype.moveToSide = function(bone , side){
                     $(self.elements[2]).animate({top:bone1pos.top + 80} , 30);
                     $(self.elements[3]).animate({top:bone1pos.top + 80} , 30);
                     
-                }, this.moveanimtime);
+                }, this.moveanimtime + 300);
             // перемещение вправо
             }else if(side === 'right'){
                 $(this.elements[0]).animate({left:board.rightpart - 40 , top : board.half} , this.moveanimtime , self.movestyle);
@@ -151,7 +151,7 @@ Bones.prototype.moveToSide = function(bone , side){
                     // и смещаем их вниз
                     $(self.elements[2]).animate({top:bone1pos.top + 80} , 30);
                     $(self.elements[3]).animate({top:bone1pos.top + 80} , 30);
-                } , this.moveanimtime);
+                } , this.moveanimtime + 300);
                 
             }else{console.error('Неверное значение для перемещения фишек');}
         break;

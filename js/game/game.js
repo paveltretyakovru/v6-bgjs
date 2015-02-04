@@ -97,6 +97,9 @@ Game.prototype.clearGame = function(){
     for(var i = 0; i < this.board.fields.length; i++){
         this.board.fields[i].pieces = [];
     }
+
+    // Убираем фишки
+    this.bones.hideBones();
     
     $('#outwhite').html('');
     $('#outblack').html('');
@@ -1217,7 +1220,7 @@ Game.prototype.endGame = function(){
         this.blockedPieces();
         // отправляем сопернику сообщение о конце игры
         //this.sendRequest('sendLose' , {});
-        console.log('END GAME CONTROLL1')
+
         this.sendRequest('clearGame' , {result : 1 , end : true});
         console.info('Отправляем выигрышь!!!!');
     }else{
