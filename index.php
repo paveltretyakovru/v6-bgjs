@@ -959,10 +959,10 @@ $visitorStats = $s->getVisitorStats();
 		</div>
 		<div class="face" data-id="6">
 			<div class="pip top left"></div>
-			<div class="pip middle left"></div>
+			<div class="pip middleSmall left"></div>
 			<div class="pip bottom left"></div>
 			<div class="pip top right"></div>
-			<div class="pip middle right"></div>
+			<div class="pip middleSmall right"></div>
 			<div class="pip bottom right"></div>
 			</div>
 	</div>
@@ -995,10 +995,10 @@ $visitorStats = $s->getVisitorStats();
 		</div>
 		<div class="face" data-id="6">
 			<div class="pip top left"></div>
-			<div class="pip middle left"></div>
+			<div class="pip middleSmall left"></div>
 			<div class="pip bottom left"></div>
 			<div class="pip top right"></div>
-			<div class="pip middle right"></div>
+			<div class="pip middleSmall right"></div>
 			<div class="pip bottom right"></div>
 			</div>
 	</div>

@@ -2589,8 +2589,8 @@ Game.prototype.takeGameData = function(data){
             ){
                 console.log('Получены данные начала игры с сервера: ' , data.inviteData);
                 // Сохраняем значение костей для хода
-                this.step.bones = data.inviteData.bones;
-                //this.step.bones = [5 , 5];
+                //this.step.bones = data.inviteData.bones;
+                this.step.bones = [6 , 6];
                 //this.step.bones = [2 , 3];
                 //this.step.bones = [1 , 5]; // block test
                 //this.step.bones = [1 , 2];  // restep test

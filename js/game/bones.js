@@ -8,9 +8,10 @@ Bones.prototype.board       = '#container';
 Bones.prototype.vals        = [0 , 0];
 Bones.prototype.size        = 40;
 Bones.prototype.selector    = {};
-Bones.prototype.moveanimtime= 1500; // время перемещения фишек
-Bones.prototype.shaketime   = 500;// время встярски костей
-Bones.prototype.movestyle   = 'easeOutBounce';
+Bones.prototype.moveanimtime= 1500;             // время перемещения фишек
+Bones.prototype.shaketime   = 500;              // время встярски костей
+Bones.prototype.movestyle   = 'easeOutBounce';  // траектория перемещения фишек (http://api.jqueryui.com/easings/)
+Bones.prototype.dubleTime   = 100;              // Время перемещения дубль костей вниз
 
 /*
     # Функция возвращает параметры доски
@@ -121,18 +122,18 @@ Bones.prototype.moveToSide = function(bone , side){
                 $(this.elements[1]).animate({left:board.leftpart + 40 , top : board.half} , this.moveanimtime , self.movestyle);
                 
                 // меняем положение от левого края доп. костей
-                $(this.elements[2]).css('left' , board.leftpart - 40);
-                $(this.elements[3]).css('left' , board.leftpart + 40);
+                $(this.elements[2]).css({'left' : board.leftpart - 40 , 'opacity' : 0});
+                $(this.elements[3]).css({'left' : board.leftpart + 40 , 'opacity' : 0});
                 
                 // после анимации 
                 setTimeout(function() {
                     // показываем дополнительные кости
-                    $(self.elements[2]).css('visibility' , 'visible');
-                    $(self.elements[3]).css('visibility' , 'visible');
+                    $(self.elements[2]).css({'visibility' : 'visible' });
+                    $(self.elements[3]).css({'visibility' : 'visible'});
                     
                     // и смещаем их вниз
-                    $(self.elements[2]).animate({top:bone1pos.top + 80} , 30);
-                    $(self.elements[3]).animate({top:bone1pos.top + 80} , 30);
+                    $(self.elements[2]).animate({top:bone1pos.top + 80 , 'opacity' : 1.0} , self.dubleTime);
+                    $(self.elements[3]).animate({top:bone1pos.top + 80 , 'opacity' : 1.0} , self.dubleTime);
                     
                 }, this.moveanimtime + 300);
             // перемещение вправо
@@ -140,17 +141,17 @@ Bones.prototype.moveToSide = function(bone , side){
                 $(this.elements[0]).animate({left:board.rightpart - 40 , top : board.half} , this.moveanimtime , self.movestyle);
                 $(this.elements[1]).animate({left:board.rightpart + 40 , top : board.half} , this.moveanimtime , self.movestyle);
                 
-                $(this.elements[2]).css('left' , board.rightpart - 40);
-                $(this.elements[3]).css('left' , board.rightpart + 40);
+                $(this.elements[2]).css({'left' : board.rightpart - 40 , 'opacity' : 0});
+                $(this.elements[3]).css({'left' : board.rightpart + 40 , 'opacity' : 0});
                 
                 setTimeout(function(){
                      // показываем дополнительные кости
-                    $(self.elements[2]).css('visibility' , 'visible');
-                    $(self.elements[3]).css('visibility' , 'visible');
+                    $(self.elements[2]).css({'visibility' : 'visible' , 'opacity' : 0.1 });
+                    $(self.elements[3]).css({'visibility' : 'visible' , 'opacity' : 0.1 });
                     
                     // и смещаем их вниз
-                    $(self.elements[2]).animate({top:bone1pos.top + 80} , 30);
-                    $(self.elements[3]).animate({top:bone1pos.top + 80} , 30);
+                    $(self.elements[2]).animate({top:bone1pos.top + 80 , 'opacity' : 1.0} , self.dubleTime);
+                    $(self.elements[3]).animate({top:bone1pos.top + 80 , 'opacity' : 1.0} , self.dubleTime);
                 } , this.moveanimtime + 300);
                 
             }else{console.error('Неверное значение для перемещения фишек');}
