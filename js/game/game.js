@@ -1980,7 +1980,7 @@ Game.prototype.setDraggable = function(piece , oldfield){
         if(x2 && x3 && y2 && y3){
             backcontroll = false;
             pieceobj.moveTo(old.x , old.y);
-
+            self.unselectPiece();
         }else{
         
             var next = self.calcNextPieces(pieceobj.id);
@@ -2232,31 +2232,39 @@ Game.prototype.giveStep = function(house){
     # для дальнейшей манипуляции
 */
 Game.prototype.selectPiece = function(piece){
-    var self = this;
+    var self , piece , id , pos;
     
-    console.info(this.selectedpiece);
+    self    = this;
     
-    if(this.selectedpiece === false){
-        select(piece , this);
-        this.setClickBoard();
+    id      = piece.id();
+    pos     = this.calcPiecePos(id);   
+
+    // выделяем только последнюю фишку в ряду
+    if(pos[1] === this.board.fields[pos[0]].pieces.length - 1){
+        console.info(this.selectedpiece);
         
-    // если кликнули на ту же самую фишку - снимаем выделение
-    }else if(this.selectedpiece.id() !== piece.id()){
-        this.unselectPiece();
-        select(piece , this);        
+        if(this.selectedpiece === false){
+            select(piece , this);
+            this.setClickBoard();
+            
+        // если кликнули на ту же самую фишку - снимаем выделение
+        }else if(this.selectedpiece.id() !== piece.id()){
+            this.unselectPiece();
+            select(piece , this);        
+            
+            this.setClickBoard();
+        }else{
+            this.unselectPiece();
+            //select(piece , this);
+        }
         
-        this.setClickBoard();
-    }else{
-        this.unselectPiece();
-        //select(piece , this);
-    }
-    
-    function select(piece , obj){
-        obj.selectedpiece = piece;
-        
-        piece.setImage(obj.imageObjects.light);
-        
-        obj.board.stage.batchDraw();
+        function select(piece , obj){
+            obj.selectedpiece = piece;
+            
+            piece.setImage(obj.imageObjects.light);
+            
+            obj.board.stage.batchDraw();
+        }
     }
 };
 
