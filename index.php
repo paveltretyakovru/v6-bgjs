@@ -1011,6 +1011,7 @@ $visitorStats = $s->getVisitorStats();
 	<script type="text/javascript" src="js/kinetic.js"></script>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <script src="https://vk.com/js/api/openapi.js" type="text/javascript"></script>
 <!--  	<script type="text/javascript" src="js/socket.io.js"></script>-->
   	<script type="text/javascript" src="js/ion.sound.min.js"></script>
   	<script type="text/javascript" src="js/underscore.js"></script>

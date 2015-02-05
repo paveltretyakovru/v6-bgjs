@@ -61,7 +61,9 @@ Game.prototype.step         = {
 };
 
 // global vars
-Game.prototype.selectedpiece = false;
+Game.prototype.selectedpiece    = false; // выделенная фишка
+Game.prototype.reselect         = false; // для перевыделения фишек
+Game.prototype.piecewidth       = 34;
 
 /*
     # Выводит сообщение пользователю
@@ -1591,6 +1593,39 @@ Game.prototype.setUndoClick = function(){
 };
 
 /*
+    Прверяет, стоит ли фишка по заданным координатам    
+*/
+Game.prototype.calcPieceInPos = function(coordinates){
+    if('x' in coordinates && 'y' in coordinates){
+        var x , x2 , y , y2 , result , piecex , piecey , pieceobj;
+        x       = coordinates.x;
+        y       = coordinates.y;
+        result  = {
+            hit : false
+        };
+
+        for(var i = 0; i < this.pieces.length-1; i++){
+            pieceobj    = this.pieces[i].obj;
+            piecex      = pieceobj.x();
+            piecey      = pieceobj.y();
+
+            // попадает ли клик на фишку
+            if( x >= piecex &&
+                x <= piecex + this.piecewidth &&
+                y >= piecey &&
+                y <= piecey + this.piecewidth
+            ){
+                result.hit = true;
+            }
+        }
+
+        return result;
+    }else{
+        console.log("В функцию переданы пустые координаты" , coordinates);
+    }
+}
+
+/*
  Функция ищет фишку в выведенных фишках
 */
 Game.prototype.findOutPiece = function(data){
@@ -1640,9 +1675,8 @@ Game.prototype.setClicksPiece = function(node , oldfield){
                 self = data.self;
                 node = data.node;
 
-                if(clicks == 1){
-                    self.selectPiece(node);   
-
+                if(clicks == 1){                    
+                    self.selectPiece(node);
                 }else if (clicks == 2){
                     
                     
@@ -2209,7 +2243,8 @@ Game.prototype.selectPiece = function(piece){
     // если кликнули на ту же самую фишку - снимаем выделение
     }else if(this.selectedpiece.id() !== piece.id()){
         this.unselectPiece();
-        select(piece , this);
+        select(piece , this);        
+        
         this.setClickBoard();
     }else{
         this.unselectPiece();
@@ -2250,89 +2285,100 @@ Game.prototype.setClickBoard = function(){
     var self = this;
     
     if(this.selectedpiece !== false){
+
+    // Очищаем событе, чтобы не слоилось
+    this.board.mainlayer.off('click');
         
     this.board.mainlayer.on('click' , function(){        
         if(self.selectedpiece !== false){
             
-            var selectedpos = self.calcPiecePos(self.selectedpiece.id());
-            var piece = self.getPiece(self.selectedpiece.id());
+            var selectedpos     = self.calcPiecePos(self.selectedpiece.id());
+            var piece           = self.getPiece(self.selectedpiece.id());
             
             // получаем координаты курсора
-            var mousePos = self.board.stage.getPointerPosition();
+            var mousePos        = self.board.stage.getPointerPosition();
+
+            var reselectcontrol = self.calcPieceInPos({x : mousePos.x , y : mousePos.y});
             
-            // вычисляем поле на котором остановилась фишка
-            var newfield    = self.board.calcField(mousePos.x , mousePos.y);
-            
-            // вычисляем поле, на которое может сходить фишка
-            var movefield   =   self.rules.calcMove(
-                                    selectedpos[0] ,
-                                    newfield ,
-                                    self.selectedpiece.id() ,
-                                    {clickboard : true}
-                                );
-            
-            
-            // если фишку перетянули из дома
-            if(selectedpos[0] === 1){
-                if(self.rules.takehead.length === 2){
-                    var tmplast = self.getLastPieces(1 , 1)
-                    if(self.rules.takehead.indexOf(tmplast[0].id) !== -1){
-                        self.rules.controllhead = true;
-                    }else{
-                        self.rules.controllhead = false;
-                    }
-                }else{
-                    self.rules.controllhead = false;            
-                }        
-            }
-            
-            // если можно сходить по кликанному полю
-            if(movefield !== false){
-                // удаляем идентификатор фишки из предыдущей позиции
-                var lastpos     = self.calcPiecePos(self.selectedpiece.id());
-                self.board.fields[lastpos[0]].pieces.splice(lastpos[1] , 1);
+            if(!reselectcontrol.hit){
+                // вычисляем поле на котором остановилась фишка
+                var newfield        = self.board.calcField(mousePos.x , mousePos.y);
                 
-                // если фишку перещаем в дом
-                if(self.rules.prehouse){
-                    if(movefield >= 1 && movefield <= 6){
-                        //console.log('TO HOUSE!!!!');
-                        movefield = 1;
-                        piece.house = true;
-                    }
+                // вычисляем поле, на которое может сходить фишка
+                var movefield       =   self.rules.calcMove(
+                                        selectedpos[0] ,
+                                        newfield ,
+                                        self.selectedpiece.id() ,
+                                        {clickboard : true}
+                                    );
+                
+                
+                // если фишку перетянули из дома
+                if(selectedpos[0] === 1){
+                    if(self.rules.takehead.length === 2){
+                        var tmplast = self.getLastPieces(1 , 1)
+                        if(self.rules.takehead.indexOf(tmplast[0].id) !== -1){
+                            self.rules.controllhead = true;
+                        }else{
+                            self.rules.controllhead = false;
+                        }
+                    }else{
+                        self.rules.controllhead = false;            
+                    }        
                 }
                 
-                // вычисляем координаты поля на которое можно сходить
-                var pos         = self.board.calcLastFieldPos(movefield);
-                
-                // перемещаем идентификатор фишки
-                self.moveIdPiece(movefield , self.selectedpiece.id());
-                
-                // перемещаем фишку
-                piece.moveTo(pos.x , pos.y);
-                
-                piece.field = movefield;
-                
-                // после завершения хода блокируем фишки, для новых расчетов
-                self.blockedPieces();
-                
-                // очищаем обработчик перемещения для новых расчетов
-                //self.selectedpiece.off('dragend');
-                
-                self.endDrag(piece);
-                
-                self.activatePieces();
-            }else{
-                self.setMessage("Невозможно сходить на данное поле");
-                setTimeout(function() {
+                // если можно сходить по кликанному полю
+                if(movefield !== false){
+                    // удаляем идентификатор фишки из предыдущей позиции
+                    var lastpos     = self.calcPiecePos(self.selectedpiece.id());
+                    self.board.fields[lastpos[0]].pieces.splice(lastpos[1] , 1);
                     
-                    if(self.step.player === 'enemy'){
-                        self.setMessage('<span style="color:red">Ход противника</span>');
-                    }else{
-                        self.setMessage('<span style="color:green">Ваш ход</span>');
+                    // если фишку перещаем в дом
+                    if(self.rules.prehouse){
+                        if(movefield >= 1 && movefield <= 6){
+                            //console.log('TO HOUSE!!!!');
+                            movefield = 1;
+                            piece.house = true;
+                        }
                     }
                     
-                }, self.ruletimemes);
+                    // вычисляем координаты поля на которое можно сходить
+                    var pos         = self.board.calcLastFieldPos(movefield);
+                    
+                    // перемещаем идентификатор фишки
+                    self.moveIdPiece(movefield , self.selectedpiece.id());
+                    
+                    // перемещаем фишку
+                    piece.moveTo(pos.x , pos.y);
+                    
+                    piece.field = movefield;
+                    
+                    // после завершения хода блокируем фишки, для новых расчетов
+                    self.blockedPieces();
+                    
+                    // очищаем обработчик перемещения для новых расчетов
+                    //self.selectedpiece.off('dragend');
+                    
+                    self.endDrag(piece);
+                    
+                    self.activatePieces();
+                }else{
+                    self.setMessage("Невозможно сходить на данное поле");
+                    setTimeout(function() {
+                        
+                        if(self.step.player === 'enemy'){
+                            self.setMessage('<span style="color:red">Ход противника</span>');
+                        }else{
+                            self.setMessage('<span style="color:green">Ваш ход</span>');
+                        }
+                        
+                    }, self.ruletimemes);
+                }
+
             }
+
+        }else{
+            self.reselect = false;
         }
     });
     
