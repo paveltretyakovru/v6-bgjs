@@ -1,7 +1,7 @@
 body{background: url(http://logic-games.spb.ru/chess/img/bg.jpg);}
 
 #container{margin : auto; height: 600px; width: 601px;}
-#gamestatus{color : red; font-size: 14pt;}
+#gamestatus{font-size: 14pt;}
 
 #outbody{height: 50px; width: 600px; margin: auto; background: url(../images/bg.jpg); border-top:1px solid #9d774b}
 #outwhite , #outblack{width:100%; height:50%}
@@ -67,11 +67,11 @@ div.die{
 	div.die div.face div.pip.centerSmall{left:16px; top: 16px;}
 	div.die div.face div.pip.middleSmall{top: 16px;}
 
-	#dop_bottom_menu{list-style: none; text-align: center; padding: 0; font-size: 11.5pt; }
+	#dop_bottom_menu{list-style: none; text-align: center; padding: 0; font-size: 11.5pt; font-family: sans-serif;}
 		#dop_bottom_menu li{float: left}
 		#home1pl{width: 20%;}
 		#home2pl{width: 20%;}
-		#gamestatus{width: 60%; font-weight: bold;}
+		#gamestatus{width: 60%; font-weight: normal;}
 	
 	/* #paneltop div{float:left; margin-left: 10px;} */
 	

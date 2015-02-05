@@ -876,7 +876,7 @@ Game.prototype.registrOnServer = function(data){
     window.client.gameManager.on('round_start', function(data){
         //console.log('main;','round_start, room: ', data);
     });
-    this.setMessage("Ожидание подключения соперника");
+    this.setMessage("Выберите соперника из списка");
 };
 
 /*
@@ -1627,7 +1627,8 @@ Game.prototype.setClicksPiece = function(node , oldfield){
     // если фишка последняя в ряду, то ее можно выделять
     if(pieceobj.last){
         var clicks = 0;
-        node.on('click' , function(){
+        node.on('click' , function(){           
+
             clicks++;
 
             var data = {
@@ -2250,7 +2251,7 @@ Game.prototype.setClickBoard = function(){
     
     if(this.selectedpiece !== false){
         
-    this.board.mainlayer.on('click' , function(){
+    this.board.mainlayer.on('click' , function(){        
         if(self.selectedpiece !== false){
             
             var selectedpos = self.calcPiecePos(self.selectedpiece.id());
