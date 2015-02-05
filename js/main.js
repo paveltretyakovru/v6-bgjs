@@ -174,8 +174,10 @@ function clientInit() {
         var userListElem = $('#userList');
         var v6chatElem = $('#v6Chat');
 
-        var posleft = $('#gameArea').offset().left;
-        var postop = $('#gameArea').offset().top;
+        var posleft     = $('#gameArea').offset().left;
+        var postop      = $('#gameArea').offset().top;
+        var areaheight  = $('#gameArea').height();
+
 
         posleft -= 280;
         userListElem.css({
@@ -190,19 +192,22 @@ function clientInit() {
             top: postop + 320
         });
 
-        $(window).resize(function () {
-            var posleft = $('#gameArea').offset().left;
-            var postop = $('#gameArea').offset().top;
+        $('.messagesWrap').css({
+          "height"    : "327px" ,
+          "max-height": "327px"
+        });
+
+        $(window).resize(function () {      
 
             posleft -= 280;
             userListElem.css({
                 left: posleft,
-                top: postop
+                top: postop                
             });
 
             v6chatElem.css({
                 left: posleft,
-                top: postop + 320
+                top: postop + 320                
             });
         });
     })
