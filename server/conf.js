@@ -2,7 +2,7 @@ module.exports = {
     game: 'backgammon',
     port: 8080,
     pingTimeout:1000000,
-    pingInterval:10000,
+    pingInterval:50000,
     logLevel:3,
     turnTime: 600,
     maxTimeouts:1,

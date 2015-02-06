@@ -506,7 +506,7 @@ Rules.prototype.calcMove = function(oldfield , newfield , pieceid , configs){
             
             //console.log('return here');
             
-            //console.log('return can1' , can1);
+            console.log('return can1' , can1);
             return can1;
         }
         if(
@@ -520,7 +520,7 @@ Rules.prototype.calcMove = function(oldfield , newfield , pieceid , configs){
                 
                 this.addSendStep([pieceid , can2 , oldfield]);
                 
-                //console.log('return here');
+                console.log('return here');
                 
                 return can2;
         }
@@ -533,7 +533,7 @@ Rules.prototype.calcMove = function(oldfield , newfield , pieceid , configs){
             
             this.addSendStep([pieceid , can2 , oldfield]);
             
-            //console.log('return here');
+            console.log('return here');
             
             return can2;
         }
@@ -564,7 +564,7 @@ Rules.prototype.calcMove = function(oldfield , newfield , pieceid , configs){
             
             this.addSendStep([pieceid , can4 , oldfield]);
             
-            //console.log('return here');
+            console.log('return here');
             
             return can4;
         }
@@ -587,7 +587,7 @@ Rules.prototype.calcMove = function(oldfield , newfield , pieceid , configs){
             
             this.piecetohouse = false;
             
-            //console.log('return can2' , can2);
+            console.log('return can2' , can2);
             return can2;
         }
         
@@ -599,7 +599,7 @@ Rules.prototype.calcMove = function(oldfield , newfield , pieceid , configs){
             
             this.addSendStep([pieceid , can2 , oldfield]);
             
-            //console.log('return can2' , can2);
+            console.log('return can2' , can2);
             return can2;
         }
         
@@ -640,7 +640,7 @@ Rules.prototype.calcMove = function(oldfield , newfield , pieceid , configs){
             
             this.addSendStep([pieceid , can2 , oldfield]);
             
-            //console.log('return can2' , can2);
+            console.log('return can2' , can2);
             return can2;
         };
         if(can3) {
@@ -655,7 +655,7 @@ Rules.prototype.calcMove = function(oldfield , newfield , pieceid , configs){
             
             this.addSendStep([pieceid , can3 , oldfield]);
             
-            //console.log('return can3' , can3);
+            console.log('return can3' , can3);
             return can3
         };
     }
@@ -718,7 +718,7 @@ Rules.prototype.calcMove = function(oldfield , newfield , pieceid , configs){
                     }
                     
                     this.addSendStep([pieceid , this.checkFieldNum(newfield) , oldfield]);
-                    //console.log('return newfield' , newfield);
+                    console.log('return newfield' , newfield);
                     return newfield;
                 }
                 
@@ -830,6 +830,7 @@ Rules.prototype.canMove = function ( field ) {
             return true;
         }
         
+        /*
         if(this.step.steps[0][1] !== 0 && this.step.steps[1][1] === 0){
             boneval = this.step.steps[1][0];
             result = this.handleRules(field , this.checkFieldNum(this.step.steps[0][2] + this.step.steps[1][0]) , boneval);
@@ -839,6 +840,7 @@ Rules.prototype.canMove = function ( field ) {
             //console.log('return true here');
             return true;
         }
+        */
         
         // может ли сходить на сумму костей
         if(this.step.steps[1][1] === 0 && this.step.steps[0][1] === 0){

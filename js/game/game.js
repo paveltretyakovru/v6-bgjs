@@ -18,7 +18,7 @@ Game.prototype.socket   = {};
 // ### конец управляющих объектов системы
 
 Game.prototype.meselement   = '#gamestatus';
-Game.prototype.type         = 'long';   // тип игры | long || prehouse // blocktest // restep // outpieces // housebroke
+Game.prototype.type         = 'long';  // тип игры: long | prehouse | blocktest | restep | outpieces | housebroke | ghost
 Game.prototype.onepos       = true;     // фишки распалагаются всега в одной позиции
 Game.prototype.pieces       = [ /* */];
 Game.prototype.side         = '';       // left || right
@@ -711,6 +711,96 @@ Game.prototype.initPieces = function(pieces){
             break;
             
             /* #################### RESTEP test end ######################### */
+
+            /* #################### GHOST MOVE test ############################# */
+            
+            case 'ghost':
+            
+            function setPiece(num , field , i , self){
+                for(var n = 0 ; n < num.length; n++){
+                    if(i === num[n]){
+                        self.pieces[i].field  = field;
+                        // распологаем белые слева
+                        self.enemy.side = 'left';
+                        self.side       = 'right';
+                                
+                        self.startPiecesPositions(self.pieces[i].obj,field,self.pieces[i]);
+                    }   
+                }
+            }
+            
+            // Расположение фишек для тестирования перевода фишек в правиле блока
+            
+            for(var i = 0; i < 30; i++){
+                pieceid = pieces[i];
+                if (i < 15){
+                    // создаем объекты фишек
+                    
+                    this.pieces[i] = new Piece(
+                                                'white' ,
+                                                pieceid ,
+                                                this.board.mainlayer ,
+                                                this.board.stage ,
+                                                'left' ,
+                                                this.imageObjects ,
+                                                this ,
+                                                this.board
+                                            );
+
+                    // если фишки должны всегда находиться в одном положении
+                    if(this.onepos){
+                        // если соперник выиграл
+                        if(this.step.player === 'enemy'){
+                            setPiece([0 , 1 , 2 , 3 , 4] , 20 , i , self);
+                            setPiece([13 , 14] , 10 , i , self);
+                            setPiece([5 , 6 , 7 , 8 , 9 , 10 , 11 , 12] , 12 , i , self);
+                        }else{
+                            setPiece([0 , 1 , 2 , 3 , 4] , 8 , i , self);
+                            setPiece([13 , 14] , 22 , i , self);
+                            setPiece([5 , 6 , 7 , 8 , 9 , 10 , 11 , 12] , 24 , i , self);
+                        }
+                    }
+                }else{
+                    this.pieces[i] = new Piece(
+                            'black' ,
+                            pieceid ,
+                            this.board.mainlayer ,
+                            this.board.stage ,
+                            'right' ,
+                            this.imageObjects ,
+                            this ,
+                            this.board
+                        );
+                    
+                    // если фишки должны всегда находиться в одном положении
+                    if(this.onepos){
+                        // если соперник выиграл
+                        if(this.step.player === 'enemy'){
+                            setPiece([15] , 1 , i  , self);
+                            setPiece([16  , 17 , 18 , 19 , 20 , 21 , 22 , 23 , 24 , 25 ] , 19 , i , self );
+                            setPiece([26] , 21  , i  , self);
+                            setPiece([27] , 22 , i  , self);
+                            setPiece([28] , 23 , i  , self);
+                            setPiece([29] , 24 , i  , self);
+                        }else{
+                            setPiece([15] , 13 , i  , self);
+                            setPiece([16  , 17 , 18 , 19 , 20 , 21 , 22 , 23 , 24 , 25 ] , 7 , i , self );
+                            setPiece([26] , 9  , i  , self);
+                            setPiece([27] , 10 , i  , self);
+                            setPiece([28] , 11 , i  , self);
+                            setPiece([29] , 12 , i  , self);
+                        }
+                    }
+                }
+            }
+            
+            /* ###################### */
+            
+            
+            break;
+            
+            /* #################### RESTEP test end ######################### */
+
         
         default : console.error("Передан неизвестный тип игры");
     }
@@ -982,6 +1072,7 @@ Game.prototype.calcCan = function(){
     }
     
     if(countcanmove === 0){
+        console.info("Нет возможных ходов");
         return false;
     }else{
         return true;
