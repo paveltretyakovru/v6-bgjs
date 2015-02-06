@@ -100,8 +100,8 @@ $visitorStats = $s->getVisitorStats();
         <!-- TOP BUTTONS --> <div class="controlPanel nonSelectable">
             <table class="controlPanelLayout" cellpadding="0">
                 <tr>
-                    <td id="tbLeave" class="cpButton cpNormal nonSelectable">Покинуть игру</td>
-                    <td id="tbUndo" class="cpButton cpNormal nonSelectable">Ход назад</td>                    
+                    <td id="tbUndo" class="cpButton cpNormal nonSelectable">Ход назад</td>
+                    <td id="tbLeave" class="cpButton cpNormal nonSelectable">Покинуть игру</td>                    
                     <!--
                     <td id="tbNewGameContainer" class="cpButton cpNormal nonSelectable cpKillHover">
                         <table style="width: 100%; height: 100%;" cellspacing="0" cellpadding="0">
