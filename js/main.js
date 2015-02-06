@@ -189,13 +189,18 @@ function clientInit() {
         v6chatElem.css({
             position: 'absolute',
             left: posleft,
-            top: postop + 320
+            top: postop + 385
         });
 
         $('.messagesWrap').css({
           "height"    : "327px" ,
-          "max-height": "327px"
+          "max-height": "260px"
         });
+
+        $('.tableWrap').css({
+          "height"      : "500px" ,
+          "max-height"  : "275px"
+        })
 
         $(window).resize(function () {      
 
@@ -207,7 +212,7 @@ function clientInit() {
 
             v6chatElem.css({
                 left: posleft,
-                top: postop + 320                
+                top: postop + 385                
             });
         });
     })
