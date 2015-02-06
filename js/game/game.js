@@ -895,11 +895,11 @@ Game.prototype.letsRock = function(){
     console.info('SET NAMES ' , window.client.getPlayer().userName , this.enemy.name);
     
     if(this.piececolor === 'white'){
-        $('#home1pl').html(window.client.getPlayer().userName + ' <br /> <img src="images/pieces/white.png" width="25" />');
-        $('#home2pl').html(this.enemy.name + '<br /> <img src="images/pieces/black.png"  width="25" />');
+        $('#home2pl').html(window.client.getPlayer().userName + ' <br /> <img src="images/pieces/white.png" width="25" class="loginPieceImage" />');
+        $('#home1pl').html(this.enemy.name + '<br /> <img src="images/pieces/black.png"  width="25" class="loginPieceImage" />');
     }else{
-        $('#home1pl').html(window.client.getPlayer().userName + '<br /><img src="images/pieces/black.png" width="25" />');
-        $('#home2pl').html(this.enemy.name + '<br /> <img src="images/pieces/white.png" width="25"/>');
+        $('#home2pl').html(window.client.getPlayer().userName + '<br /><img src="images/pieces/black.png" width="25" class="loginPieceImage" />');
+        $('#home1pl').html(this.enemy.name + '<br /> <img src="images/pieces/white.png" width="25" class="loginPieceImage" />');
     }
     
     // Выводим сообщение
@@ -1684,68 +1684,74 @@ Game.prototype.setClicksPiece = function(node , oldfield){
 
 
                     // снимаем выделение на всякий случай
-                    self.unselectPiece();                    
+                    self.unselectPiece();
 
-                    var nowfield = self.calcPiecePos(node.id());
+                    id      = node.id();
+                    pos     = self.calcPiecePos(id);   
 
-                    // вычисляем поле, на которое может сходить фишка
-                    var movefield   =   self.rules.calcMove(
-                                            oldfield ,
-                                            nowfield[0] + 1 ,
-                                            node.id() ,
-                                            {clickboard : false , movemax : false}
-                                        );
+                    // выделяем только последнюю фишку в ряду
+                    if(pos[1] === self.board.fields[pos[0]].pieces.length - 1){
 
-                    // если фишку перетянули из дома
-                    // если фишку перетянули из дома
-                    if(oldfield === 1){
-                        if(self.rules.takehead.length === 2){
-                            var tmplast = self.getLastPieces(1 , 1);
-                            if(self.rules.takehead.indexOf(tmplast[0].id) !== -1){
-                                self.rules.controllhead = true;
+                        var nowfield = self.calcPiecePos(node.id());
+
+                        // вычисляем поле, на которое может сходить фишка
+                        var movefield   =   self.rules.calcMove(
+                                                oldfield ,
+                                                nowfield[0] + 1 ,
+                                                node.id() ,
+                                                {clickboard : false , movemax : false}
+                                            );
+
+                        // если фишку перетянули из дома
+                        // если фишку перетянули из дома
+                        if(oldfield === 1){
+                            if(self.rules.takehead.length === 2){
+                                var tmplast = self.getLastPieces(1 , 1);
+                                if(self.rules.takehead.indexOf(tmplast[0].id) !== -1){
+                                    self.rules.controllhead = true;
+                                }else{
+                                    self.rules.controllhead = false;
+                                }
                             }else{
-                                self.rules.controllhead = false;
-                            }
-                        }else{
-                            self.rules.controllhead = false;            
-                        }        
-                    }
-
-                    // если фишку перещаем в дом
-                    if(self.rules.prehouse){
-                        if(movefield >= 1 && movefield <= 6){
-                            //console.log('TO HOUSE!!!!');
-                            movefield = 1;
-                            pieceobj.house = true;
+                                self.rules.controllhead = false;            
+                            }        
                         }
+
+                        // если фишку перещаем в дом
+                        if(self.rules.prehouse){
+                            if(movefield >= 1 && movefield <= 6){
+                                //console.log('TO HOUSE!!!!');
+                                movefield = 1;
+                                pieceobj.house = true;
+                            }
+                        }
+
+
+
+                        // удаляем идентификатор фишки из предыдущей позиции
+                        var lastpos     = self.calcPiecePos(node.id());
+                        self.board.fields[lastpos[0]].pieces.splice(lastpos[1] , 1);
+
+                        // вычисляем координаты поля на которое можно сходить
+                        var pos         = self.board.calcLastFieldPos(movefield);
+
+                        pieceobj.moveTo(pos.x , pos.y);
+
+                        // перемещаем идентификатор фишки
+                        self.moveIdPiece(movefield , node.id());
+
+                        // сохраняем поле на котором оказалась фишка
+                        pieceobj.field = movefield;
+
+                        if(pieceobj.house){
+                            self.outPiece(pieceobj , false);
+                        }
+
+                        // завершающие действия хода
+                        self.endDrag(pieceobj);
+
+                        /* #################### DOUBLE END ################ */
                     }
-
-
-
-                    // удаляем идентификатор фишки из предыдущей позиции
-                    var lastpos     = self.calcPiecePos(node.id());
-                    self.board.fields[lastpos[0]].pieces.splice(lastpos[1] , 1);
-
-                    // вычисляем координаты поля на которое можно сходить
-                    var pos         = self.board.calcLastFieldPos(movefield);
-
-                    pieceobj.moveTo(pos.x , pos.y);
-
-                    // перемещаем идентификатор фишки
-                    self.moveIdPiece(movefield , node.id());
-
-                    // сохраняем поле на котором оказалась фишка
-                    pieceobj.field = movefield;
-
-                    if(pieceobj.house){
-                        self.outPiece(pieceobj , false);
-                    }
-
-                    // завершающие действия хода
-                    self.endDrag(pieceobj);
-
-                    /* #################### DOUBLE END ################ */
-
 
                 }
                 clicks = 0;
