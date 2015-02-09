@@ -87,8 +87,8 @@ Bones.prototype.moveToSide = function(bone , side){
     /* делаем не прозрачными перед началом хода */
     $(this.elements[0]).css('opacity' , 1);
     $(this.elements[1]).css('opacity' , 1);
-    $(this.elements[2]).css('opacity' , 1);
-    $(this.elements[3]).css('opacity' , 1);
+    $(this.elements[2]).css('opacity' , 0);
+    $(this.elements[3]).css('opacity' , 0);
     
     // меняем верхнее положение доп. костей
     $(this.elements[2] + ',' + this.elements[3]).css('top' , bone1pos.top);

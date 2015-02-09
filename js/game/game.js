@@ -2134,6 +2134,9 @@ Game.prototype.movePiece = function(x , y , oldfield , piece){
     // вычисляем поле на котором остановилась фишка
     var newfield    = this.board.calcField(x , y , {oldfield : oldfield});
     //console.log('movePiece. oldfield:' , oldfield , '; newfield:' , newfield);
+
+    // Костыль, чтобы передвигая с первого поля, фишка летела на минимальный ход
+    if(oldfield === 1 && newfield > 18) newfield = 1;
         
     // вычисляем поле, на которое может сходить фишка
     var movefield   = this.rules.calcMove(oldfield , newfield , piece.id , dopdata);
