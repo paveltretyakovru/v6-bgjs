@@ -128,6 +128,9 @@ Game.prototype.clearGame = function(){
         this.board.fields[i].pieces = [];
     }
 
+    $('#home1pl').html('');
+    $('#home2pl').html('');    
+
     // Убираем фишки
     this.bones.hideBones();
     
