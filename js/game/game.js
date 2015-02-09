@@ -2092,7 +2092,7 @@ Game.prototype.setDraggable = function(piece , oldfield){
     
     // событие после отпускания фишки, после её перетягивания
     piece.on('dragend' , function(){
-        var x , y , x3 , x2 , y3 , y2 , old;
+        var x , y , x3 , x2 , y3 , y2 , old , next;
         
         x = this.x();
         y = this.y();
@@ -2103,18 +2103,21 @@ Game.prototype.setDraggable = function(piece , oldfield){
         y2 = (old.y - 30) <= y;
         y3 = (old.y + 30) >= y;
 
-
-        console.log('dragend' , x2 , x3 , y2 , y3);
+        // если перетягивают несолько фишек
+        next = self.calcNextPieces(pieceobj.id);        
         
-        //if(x === pieceobj.oldpos.x && y === pieceobj.oldpos.y){
-        //    self.selectPiece(this);
         if(x2 && x3 && y2 && y3){
             backcontroll = false;
             pieceobj.moveTo(old.x , old.y);
             self.unselectPiece();
-        }else{
-        
-            var next = self.calcNextPieces(pieceobj.id);
+            
+            // возвращаем соседние фишки так же на место
+            for(var i = 1; i < next.length; i++){
+                if(typeof next[i] !== "undefined"){
+                    next[i].moveTo(next[i].oldpos.x , next[i].oldpos.y);
+                }
+            }
+        }else{            
                 
             for(var i = 0; i < next.length; i++){
                 self.movePiece(x , y , oldfield , next[i]);
