@@ -15,9 +15,8 @@ module.exports =
 	doTurn : (room, user, turn) ->		
 		if 'data' of turn
 			# если игрок закончил ходить и передает ход другому генерируем кости для следующего игрока
-			if turn.data.end
-				console.log 'turn end! :-)'
-				#turn.data.bones = [5 , 3]
+			if turn.data.end				
+				#turn.data.bones = [3 , 3]
 				turn.data.bones = @Backgammon.generateBones()
 		turn
     

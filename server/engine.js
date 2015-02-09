@@ -21,7 +21,6 @@
     doTurn: function(room, user, turn) {
       if ('data' in turn) {
         if (turn.data.end) {
-          console.log('turn end! :-)');
           turn.data.bones = this.Backgammon.generateBones();
         }
       }

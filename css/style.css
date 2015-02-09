@@ -13,6 +13,7 @@ body{background: url(http://logic-games.spb.ru/chess/img/bg.jpg);}
 /* #welcome-div{display: none;} */
 
 /* DIES STYLES */
+
 #die3 .pip , #die4 .pip{width: 7px; height: 7px;}
 #die3 {width: 40px; height: 40px; top:400px;}
 #die4 {width: 40px; height: 40px; top:400px;}

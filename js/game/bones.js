@@ -292,8 +292,8 @@ Bones.prototype.lightControll = function (steps , active){
         if(active){
             $(this.elements[0]).css('opacity' , 1);
             $(this.elements[1]).css('opacity' , 1);
-            $(this.elements[2]).css('opacity' , 1);
-            $(this.elements[3]).css('opacity' , 1);
+            //$(this.elements[2]).css('opacity' , 1);
+            //$(this.elements[3]).css('opacity' , 1);
         }else{
             if(steps[0][1] === 0){
                 $(this.elements[3]).css('opacity' , 1);

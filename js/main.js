@@ -167,7 +167,9 @@ function clientInit() {
             console.log('main;', 'game_leave room:', data);
             game.setMessage("<span> </span>");
             // на всякий случай очищаем данные об игре
-            game.clearGame();
+            
+            game.enemyLeaveControll({leave : true});
+
             game.gamefinish = false;
         });
 

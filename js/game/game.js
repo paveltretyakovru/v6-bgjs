@@ -41,6 +41,7 @@ Game.prototype.gamefinish   = false;
 Game.prototype.imageObjects = {};
 Game.prototype.light        = {};
 Game.prototype.timer        = {};
+Game.prototype.timers       = {};
 Game.prototype.outPieces    = [];   // выведенные фишки
 
 Game.prototype.self         = {
@@ -48,7 +49,8 @@ Game.prototype.self         = {
 };
 
 Game.prototype.enemy        = {
-    reinvite : false
+    reinvite : false ,
+    leave    : false
 };
 
 Game.prototype.step         = {
@@ -73,6 +75,32 @@ Game.prototype.piecewidth       = 34;
 Game.prototype.setMessage = function(message){
     $(this.meselement).html(message);
 };
+
+/*
+    Функция контролирует непредвиденные обстоятельства при выходе соперника в разных обстоятельствах
+*/
+Game.prototype.enemyLeaveControll = function(data){
+    if(typeof data !== "undefined"){
+        if('leave' in data){
+            this.enemy.leave = data.leave;
+        }
+    }    
+
+    if(this.enemy.leave || typeof this.enemy.name === "undefined"){
+        console.log('RETURN FALSE');
+        clearTimeout(this.timers.initPieces);
+        clearTimeout(this.timers.shakeLot);
+        clearTimeout(this.timers.secondShake);
+        clearTimeout(this.timers.moveBones);
+
+        this.clearGame();
+        return false;
+    }else{
+        return true;
+    }
+
+};
+
 
 /* Очищаем данные текущей игры */
 Game.prototype.clearGame = function(){
@@ -984,27 +1012,30 @@ Game.prototype.letsRock = function(){
     
     console.info('SET NAMES ' , window.client.getPlayer().userName , this.enemy.name);
     
-    if(this.piececolor === 'white'){
-        $('#home2pl').html(window.client.getPlayer().userName + ' <br /> <img src="images/pieces/white.png" width="25" class="loginPieceImage" />');
-        $('#home1pl').html(this.enemy.name + '<br /> <img src="images/pieces/black.png"  width="25" class="loginPieceImage" />');
-    }else{
-        $('#home2pl').html(window.client.getPlayer().userName + '<br /><img src="images/pieces/black.png" width="25" class="loginPieceImage" />');
-        $('#home1pl').html(this.enemy.name + '<br /> <img src="images/pieces/white.png" width="25" class="loginPieceImage" />');
-    }
-    
-    // Выводим сообщение
-    if(player === 'enemy'){
-        this.setMessage('<span style="color:red">Ход противника</span>');
-    }else{this.setMessage('<span style="color:green">Ваш ход</span>');}
-    
-    if(player === 'self'){
-        // Считаем количество ходов
-        this.calcPoints();
+    if(this.enemy.name !== undefined){
+
+        if(this.piececolor === 'white'){
+            $('#home2pl').html(window.client.getPlayer().userName + ' <br /> <img src="images/pieces/white.png" width="25" class="loginPieceImage" />');
+            $('#home1pl').html(this.enemy.name + '<br /> <img src="images/pieces/black.png"  width="25" class="loginPieceImage" />');
+        }else{
+            $('#home2pl').html(window.client.getPlayer().userName + '<br /><img src="images/pieces/black.png" width="25" class="loginPieceImage" />');
+            $('#home1pl').html(this.enemy.name + '<br /> <img src="images/pieces/white.png" width="25" class="loginPieceImage" />');
+        }
         
-        this.bones.lightControll( this.step.steps, true);
+        // Выводим сообщение
+        if(player === 'enemy'){
+            this.setMessage('<span style="color:red">Ход противника</span>');
+        }else{this.setMessage('<span style="color:green">Ваш ход</span>');}
         
-        // Теперь необходимо активировать возможные фишки
-        this.activatePieces();
+        if(player === 'self'){
+            // Считаем количество ходов
+            this.calcPoints();
+            
+            this.bones.lightControll( this.step.steps, true);
+            
+            // Теперь необходимо активировать возможные фишки
+            this.activatePieces();
+        }
     }
 };
 
@@ -2705,6 +2736,9 @@ Game.prototype.calcPoints = function(){
     #
 */
 Game.prototype.takeGameData = function(data){
+
+    this.enemyLeaveControll({leave : false});
+
     console.log("takeGameData " , data);
     // получаем объект соперника
     function getEnemy(list){
@@ -2741,94 +2775,108 @@ Game.prototype.takeGameData = function(data){
         this.clearGame();
         this.gamefinish = false;
     }
+
+    if(this.enemy.name !== "undefined"){
     
-    if(typeof(data.inviteData) === 'object'){
-        if(
-                'id'         in data.inviteData
-            &&  'pieces'     in data.inviteData
-            &&  'bones'      in data.inviteData
-            &&  'lotbones'   in data.inviteData
-        ){
+
+    if(this.enemyLeaveControll()){
+        if(typeof(data.inviteData) === 'object'){
             if(
-                data.inviteData.id         !== undefined
-                && data.inviteData.pieces  !== undefined
-                && data.inviteData.bones   !== undefined
-                && data.inviteData.lotbones!== undefined
+                    'id'         in data.inviteData
+                &&  'pieces'     in data.inviteData
+                &&  'bones'      in data.inviteData
+                &&  'lotbones'   in data.inviteData
             ){
-                console.log('Получены данные начала игры с сервера: ' , data.inviteData);
-                // Сохраняем значение костей для хода
-                this.step.bones = data.inviteData.bones;
-                //this.step.bones = [6 , 6];
-                //this.step.bones = [2 , 3];
-                //this.step.bones = [1 , 5]; // block test
-                //this.step.bones = [1 , 2];  // restep test
-                //this.step.bones = [3 , 4];
+                if(
+                    data.inviteData.id         !== undefined
+                    && data.inviteData.pieces  !== undefined
+                    && data.inviteData.bones   !== undefined
+                    && data.inviteData.lotbones!== undefined
+                ){
+                    console.log('Получены данные начала игры с сервера: ' , data.inviteData);
+                    // Сохраняем значение костей для хода
+                    this.step.bones = data.inviteData.bones;
+                    //this.step.bones = [6 , 6];
+                    //this.step.bones = [2 , 3];
+                    //this.step.bones = [1 , 5]; // block test
+                    //this.step.bones = [1 , 2];  // restep test
+                    //this.step.bones = [3 , 4];
 
-                
-                
-                // Анимируем жеребьевку
-                this.animateLot(data.inviteData.lotbones);
-                
-                // Определяем чей ход
-                if(data.first.isPlayer){
-                    this.step.player        = 'self';
-                    this.piececolor         = 'white';
-                    this.board.piececolor   = 'white';
-                }else{
-                    this.step.player        = 'enemy';
-                    this.piececolor         = 'black';
-                    this.board.piececolor   = 'black';
-                }
-                
-                /*
-                if(data.inviteData.lotbones[0] > data.inviteData.lotbones[1]){
-                    this.step.player        = 'self';
-                    this.piececolor         = 'white';
-                    this.board.piececolor   = 'white';
-                }else{
-                    this.step.player        = 'enemy';
-                    this.piececolor         = 'black';
-                    this.board.piececolor   = 'black';
-                }
-                */
-                
-                /*
-                    # Инициализация фишек
-                    # Она происходит после анимации жеребьевки
-                    #
-                */
-                setTimeout(function() {
-                    self.initPieces(data.inviteData.pieces);
-                    //self.moveBonesToNeed();
                     
-                    // После передвижения фишек, снова взбалтываем их
-                    // для определения очков хода
-                    setTimeout(function(){
-                        // время тряски
-                        var shaketime   = self.timelot / 6;
-                        // взбалтываем первую кость
-
-                        console.log('Lot bones: ' , self.step.bones , self.side);
-
-                        self.bones.animateStepBones(self.step.bones , self.side);
-
-                        //self.bones.shake(0 , shaketime , self.step.bones[0]);                    
-                        
-                        setTimeout(function(){
-                            // взбалтываем вторую кость
-                            //self.bones.shake(1 , shaketime , self.step.bones[1]);
+                    
+                    // Анимируем жеребьевку
+                    this.animateLot(data.inviteData.lotbones);
+                    
+                    // Определяем чей ход
+                    if(data.first.isPlayer){
+                        this.step.player        = 'self';
+                        this.piececolor         = 'white';
+                        this.board.piececolor   = 'white';
+                    }else{
+                        this.step.player        = 'enemy';
+                        this.piececolor         = 'black';
+                        this.board.piececolor   = 'black';
+                    }
+                    
+                    /*
+                    if(data.inviteData.lotbones[0] > data.inviteData.lotbones[1]){
+                        this.step.player        = 'self';
+                        this.piececolor         = 'white';
+                        this.board.piececolor   = 'white';
+                    }else{
+                        this.step.player        = 'enemy';
+                        this.piececolor         = 'black';
+                        this.board.piececolor   = 'black';
+                    }
+                    */
+                    
+                    /*
+                        # Инициализация фишек
+                        # Она происходит после анимации жеребьевки
+                        #
+                    */
+                    this.timers.initPieces = setTimeout(function() {
+                        if(self.enemyLeaveControll()){
+                            self.initPieces(data.inviteData.pieces);
+                            //self.moveBonesToNeed();
                             
-                            // НАКОНЕЦ НАЧИНАЕМ ИГРУ!!!
-                            self.letsRock();
-                            
-                        } , shaketime);
-                    // время ожидания равно длительности анимации
-                    } , self.bones.moveanimtime);
-                }, this.timelot);
-                
-            }else{console.error("Один из параметров игры не определен" , data.inviteData )}
-        }else{console.error("Один из параметров игры отсутсвует. " , data.inviteData );}
-    }else{console.error("Данные игры переданы не объектом" , data.inviteData );}
+                            // После передвижения фишек, снова взбалтываем их
+                            // для определения очков хода
+                            this.timers.shakeLot = setTimeout(function(){
+                                if(self.enemyLeaveControll()){
+                                    // время тряски
+                                    var shaketime   = self.timelot / 6;
+                                    // взбалтываем первую кость
+
+                                    console.log('Lot bones: ' , self.step.bones , self.side);
+
+                                    self.bones.animateStepBones(self.step.bones , self.side);
+
+                                    //self.bones.shake(0 , shaketime , self.step.bones[0]);                    
+                                    
+                                    this.timers.secondShake = setTimeout(function(){
+                                        if(self.enemyLeaveControll()){
+                                            // взбалтываем вторую кость
+                                            //self.bones.shake(1 , shaketime , self.step.bones[1]);
+                                            
+                                            // НАКОНЕЦ НАЧИНАЕМ ИГРУ!!!
+                                            self.letsRock();
+                                        }else{console.error("enemy leave");}
+                                    } , shaketime);
+                                }else{console.error("enemy leave");}
+                            // время ожидания равно длительности анимации
+                            } , self.bones.moveanimtime);
+                        }else{console.error("enemy leave");}
+                    }, this.timelot);
+                    
+                }else{console.error("Один из параметров игры не определен" , data.inviteData )}
+            }else{console.error("Один из параметров игры отсутсвует. " , data.inviteData );}
+        }else{console.error("Данные игры переданы не объектом" , data.inviteData );}
+    }else{
+        console.error("enemy leave");
+    }
+
+    }
 };
 
 Game.prototype.moveBonesToNeed = function(){
@@ -2868,17 +2916,19 @@ Game.prototype.animateLot = function(lots){
     this.bones.shake(0 , shaketime , lots[0]);
 
     // спустя секунды шейкеруем 2 кость
-    setTimeout(function() {
-        // перемещаем 2 кость вправо
-        self.bones.changeSide(1 , 'right');
-        // взбалтываем и перемещиваем
-        self.bones.shake(1 , shaketime , lots[1]);
-        // Отображаем чей ход
-        if(self.step.player === 'enemy'){
-            self.setMessage('<span style="color:red">Жеребьевка окончена. Ход противника</span>');
-        }else{
-            self.setMessage('<span style="color:green">Жеребьевка окончена. Ваш ход</span>');
-        }
+    this.timers.moveBones = setTimeout(function() {
+        if(self.enemyLeaveControll()){
+            // перемещаем 2 кость вправо
+            self.bones.changeSide(1 , 'right');
+            // взбалтываем и перемещиваем
+            self.bones.shake(1 , shaketime , lots[1]);
+            // Отображаем чей ход
+            if(self.step.player === 'enemy'){
+                self.setMessage('<span style="color:red">Жеребьевка окончена. Ход противника</span>');
+            }else{
+                self.setMessage('<span style="color:green">Жеребьевка окончена. Ваш ход</span>');
+            }
+        }else{console.error("enemy leave");}
     }, shaketime);
 };
 
