@@ -23,6 +23,7 @@ $s->updateActivity();
 
 $visitorStats = $s->getVisitorStats();
 */
+$v = '10';
 ?>
 <!DOCTYPE HTML>
 <html>
